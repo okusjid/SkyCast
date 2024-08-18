@@ -1,8 +1,9 @@
-import Header from "./Common/components/Header/Header";
-import Search from "./Common/components/Search/Search";
+import Header from "./Common/components/Header";
+import Search from "./Common/components/Search";
 import WeatherCard from "./Common/components/Weather Cards/WeatherCard";
 import WeatherDetails from "./Common/components/Weather Cards/WeatherDetails";
-import Footer from "./Common/components/Footer/Footer";
+import RecentSearches from "./Common/components/RecentSearches";
+import Footer from "./Common/components/Footer";
 
 export default function App() {
   return (
@@ -11,52 +12,28 @@ export default function App() {
         autoPlay
         loop
         muted
-        className="absolute w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover"
         src="/Background-Main.mp4"
       >
         {/* Fallback image or content can be placed here */}
         <div className="w-full h-full bg-fallback-bg bg-cover"></div>
-
       </video>
-      <div className="relative backdrop-blur-md h-full">
-        <Header />
-        <Search />
-        <div className="flex justify-center items-center pt-8 space-x-8">
-          <WeatherCard />
-          <WeatherDetails />
-        </div>
-        <div className="flex justify-center pt-10">
-          <div className="bg-gradient-to-bl from-purple-600 to-blue-400 rounded-lg shadow-lg p-6 text-gray-100 w-2/3">
-            <div className="grid grid-cols-5 gap-4 divide-x divide-gray-300">
-              <div className="text-center">
-                <h3 className="text-xl font-bold">City: Lahore</h3>
-                <p>Weather: Sunny</p>
-                <p>Temp: 30°C</p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-xl font-bold">City: Karachi</h3>
-                <p>Weather: Cloudy</p>
-                <p>Temp: 25°C</p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-xl font-bold">City: Islamabad</h3>
-                <p>Weather: Sunny</p>
-                <p>Temp: 30°C</p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-xl font-bold">City: Peshawar</h3>
-                <p>Weather: Cloudy</p>
-                <p>Temp: 25°C</p>
-              </div>
-              <div className="text-center">
-                <h3 className="text-xl font-bold">City: Quetta</h3>
-                <p>Weather: Sunny</p>
-                <p>Temp: 30°C</p>
-              </div>
+      <div className="absolute inset-0 bg-black bg-opacity-60">
+        <div className="relative h-full backdrop-blur-md">
+          <Header />
+          <Search />
+          <div className="flex flex-col items-center pt-20 space-y-8">
+            {/* Weather Cards */}
+            <div className="flex justify-center items-center space-x-8">
+              <WeatherCard />
+              <WeatherDetails />
             </div>
+            {/* Recent Searches */}
+            <RecentSearches />
           </div>
+          {/* Footer */}
+          <Footer />
         </div>
-        <Footer /> {/* Footer */}
       </div>
     </div>
   );

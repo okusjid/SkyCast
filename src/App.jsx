@@ -25,7 +25,7 @@ export default function App() {
           <WeatherCard />
           <WeatherDetails />
         </div>
-        <div className="flex justify-center pt-8">
+        <div className="flex justify-center pt-10">
           <div className="bg-gradient-to-bl from-purple-600 to-blue-400 rounded-lg shadow-lg p-6 text-gray-100 w-2/3">
             <div className="grid grid-cols-5 gap-4 divide-x divide-gray-300">
               <div className="text-center">

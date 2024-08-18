@@ -4,19 +4,17 @@ import { useGetWeatherByCityQuery, useGetCityByCoordsQuery } from "../../service
 import { addSearch } from "../recentSearches/recentSearchesSlice";
 import WeatherCardLayout from "./WeatherCardLayout";
 
-export default function WeatherCard() {
-  const [city, setCity] = useState("Lahore");
+export default function WeatherCard({ city }) {
+  const [localTime, setLocalTime] = useState(new Date());
   const [coords, setCoords] = useState(null);
   const dispatch = useDispatch();
 
-  // Fetch city name using coordinates
-  const { data: cityData, isLoading: cityLoading } = useGetCityByCoordsQuery(coords, {
-    skip: !coords,
-  });
+  // Fetch weather data including timezone information using city name
+  const { data: weatherData, isLoading: weatherLoading } = useGetWeatherByCityQuery(city);
 
-  // Get user's approximate location and find the city name
+  // Get user's approximate location and find the city name (only when first loading)
   useEffect(() => {
-    if (navigator.geolocation) {
+    if (!city && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { latitude, longitude } = position.coords;
@@ -25,35 +23,44 @@ export default function WeatherCard() {
         (error) => {
           console.error("Error fetching location: ", error);
           // Fallback city if location access is denied
-          setCity("Lahore");
+          dispatch(addSearch("Lahore")); // Optional: Add "Lahore" as fallback
         }
       );
-    } else {
-      setCity("Lahore"); // Fallback city if geolocation is not supported
     }
-  }, []);
+  }, [city, dispatch]);
 
-  // Set city name once fetched from coordinates
+  // Update the local time for the searched city based on the city's timezone
   useEffect(() => {
-    if (cityData) {
-      setCity(cityData[0]?.name);
+    if (weatherData && weatherData.timezone) {
+      const timezoneOffsetInSeconds = weatherData.timezone;
+      const currentUtcTime = new Date().getTime();
+      const localTimeInMs = currentUtcTime + timezoneOffsetInSeconds * 1000;
+      setLocalTime(new Date(localTimeInMs));
     }
-  }, [cityData]);
+  }, [weatherData]);
 
-  // Handle manual city search
-  const handleCitySearch = (searchedCity) => {
-    setCity(searchedCity);
-    dispatch(addSearch(searchedCity));
-  };
+  // Set up the live clock with an interval that updates every second based on the city's timezone
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      if (weatherData && weatherData.timezone) {
+        const timezoneOffsetInSeconds = weatherData.timezone;
+        const currentUtcTime = new Date().getTime();
+        const localTimeInMs = currentUtcTime + timezoneOffsetInSeconds * 1000;
+        setLocalTime(new Date(localTimeInMs));
+      }
+    }, 1000);
 
-  if (cityLoading) return <p>Loading...</p>;
+    // Cleanup interval on component unmount
+    return () => clearInterval(intervalId);
+  }, [weatherData]);
+
+  if (weatherLoading) return <p>Loading...</p>;
 
   return (
     <WeatherCardLayout gradient="from-purple-600 to-blue-400">
       <h2 className="text-3xl font-extrabold text-gray-100 mb-2">City: {city}</h2>
-      <h3 className="text-lg text-gray-200 mb-1">Date: {new Date().toLocaleDateString()}</h3>
-      <h3 className="text-lg text-gray-200 mb-1">Time: {new Date().toLocaleTimeString()}</h3>
-      <h3 className="text-lg text-gray-200">Weather: Sunny</h3> {/* This can be updated dynamically if needed */}
+      <h3 className="text-lg text-gray-200 mb-1">Date: {localTime.toLocaleDateString()}</h3>
+      <h3 className="text-lg text-gray-200 mb-1">Time: {localTime.toLocaleTimeString()}</h3>
     </WeatherCardLayout>
   );
 }

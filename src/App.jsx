@@ -33,7 +33,7 @@ export default function App() {
           <div className="flex flex-col items-center pt-20 space-y-8">
             <Search onSearch={handleSearch} />
             <div className="flex justify-center items-center space-x-8">
-              <WeatherCard />
+              <WeatherCard city={city}/>
               <WeatherDetails city={city} />
             </div>
             <RecentSearches />

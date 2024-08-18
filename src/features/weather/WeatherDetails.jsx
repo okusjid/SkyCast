@@ -14,7 +14,7 @@ export default function WeatherDetails({ city }) {
 
   if (isLoading) return <p>Loading...</p>;
 
-  const temperature = isCelsius ? weatherData?.main.temp : (weatherData?.main.temp * 9/5) + 32;
+  const temperature = isCelsius ? weatherData?.main.temp : (weatherData?.main.temp * 9 / 5) + 32;
   const unit = isCelsius ? "°C" : "°F";
 
   return (
@@ -38,9 +38,14 @@ export default function WeatherDetails({ city }) {
         <h2 className="text-3xl font-extrabold text-gray-100 mb-2">
           Temperature: {temperature}{unit}
         </h2>
+        {/* <h3 className="text-lg text-gray-200">Weather: {weatherData?.main.weather}</h3> */}
+
         <h3 className="text-lg text-gray-200 mb-1">Humidity: {weatherData?.main.humidity}%</h3>
         <h3 className="text-lg text-gray-200 mb-1">Wind: {weatherData?.wind.speed} m/s</h3>
         <h3 className="text-lg text-gray-200">Precipitation: {weatherData?.rain ? weatherData.rain['1h'] : "0"} mm</h3>
+      {
+        console.log(weatherData)
+      }
       </div>
     </WeatherCardLayout>
   );

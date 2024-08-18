@@ -14,12 +14,18 @@ export default function WeatherDetails({ city }) {
 
   if (isLoading) return <p>Loading...</p>;
 
-  const temperature = isCelsius ? weatherData?.main.temp : (weatherData?.main.temp * 9 / 5) + 32;
+  const temperature = isCelsius
+    ? weatherData?.main.temp
+    : (weatherData?.main.temp * 9) / 5 + 32;
   const unit = isCelsius ? "°C" : "°F";
 
   return (
     <WeatherCardLayout gradient="from-teal-400 to-blue-600">
       <div className="relative">
+      {/* show city name */}
+        <h1 className="text-4xl font-extrabold text-gray-100 mb-2">
+          {city}
+        </h1>
         {/* Toggle Button */}
         <div className="absolute top-20 right-2">
           <label className="inline-flex items-center cursor-pointer">
@@ -36,16 +42,29 @@ export default function WeatherDetails({ city }) {
 
         {/* Weather Details */}
         <h2 className="text-3xl font-extrabold text-gray-100 mb-2">
-          Temperature: {temperature}{unit}
+          {/* round of temp value */}
+          Temperature: {Math.round(temperature)} {unit}
         </h2>
-        {/* <h3 className="text-lg text-gray-200">Weather: {weatherData?.main.weather}</h3> */}
+        <h3 className="text-lg text-gray-200 mb-1">
+          Weather: {weatherData?.weather[0]?.description || "N/A"}
+        </h3>
+        <h3 className="text-lg text-gray-200 mb-1">
+          Humidity: {weatherData?.main.humidity}%
+        </h3>
+        <h3 className="text-lg text-gray-200 mb-1">
+          Wind: {weatherData?.wind.speed} m/s
+        </h3>
+        <h3 className="text-lg text-gray-200 mb-1">
+          Visibility: {weatherData?.visibility / 1000} km
+        </h3>
+        <h3 className="text-lg text-gray-200">
+          Precipitation: {weatherData?.rain ? weatherData.rain["1h"] : "0"} mm
+        </h3>
 
-        <h3 className="text-lg text-gray-200 mb-1">Humidity: {weatherData?.main.humidity}%</h3>
-        <h3 className="text-lg text-gray-200 mb-1">Wind: {weatherData?.wind.speed} m/s</h3>
-        <h3 className="text-lg text-gray-200">Precipitation: {weatherData?.rain ? weatherData.rain['1h'] : "0"} mm</h3>
-      {
-        console.log(weatherData)
-      }
+        {/* Display JSON data for debugging or further details */}
+        {/* <pre className="text-sm text-gray-300 mt-4 p-2 bg-gray-800 rounded-lg">
+          {JSON.stringify(weatherData, null, 2)}
+        </pre> */}
       </div>
     </WeatherCardLayout>
   );

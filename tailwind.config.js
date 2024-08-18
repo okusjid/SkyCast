@@ -8,7 +8,7 @@ export default {
     extend: {
       backgroundImage: {
         'rain-bg': "url('/Rain.jpg')", // Adding the Rain background
-        'cloud-bg': "url('/Cloud.png')", // Adding the Cloud background
+        'fallback-bg': "url('/Cloud.png')", // Adding the Cloud background
       },
     },
   },

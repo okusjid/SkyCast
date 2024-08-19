@@ -1,18 +1,34 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import { useGetWeatherByCityQuery } from "../../services/weatherApi";
 import WeatherCardLayout from "./WeatherCardLayout";
+import { selectCity } from "./WeatherSlice";
 
-export default function WeatherDetails({ city }) {
+export default function WeatherDetails() {
   const [isCelsius, setIsCelsius] = useState(true);
+  const city = useSelector(selectCity); // Access city from Redux store
 
   // Fetch weather data using city name
-  const { data: weatherData, isLoading } = useGetWeatherByCityQuery(city);
+  const { data: weatherData, isLoading, isError } = useGetWeatherByCityQuery(city);
 
   const handleToggle = () => {
     setIsCelsius(!isCelsius);
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-xl font-bold text-gray-500">Loading...</p>
+      </div>
+    );
+  }
+  if (isError) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-xl font-bold text-red-500">Error: Unable to fetch weather data</p>
+      </div>
+    );
+  }
 
   const temperature = isCelsius
     ? weatherData?.main.temp
@@ -22,12 +38,10 @@ export default function WeatherDetails({ city }) {
   return (
     <WeatherCardLayout gradient="from-teal-400 to-blue-600">
       <div className="relative">
-      {/* show city name */}
-        <h1 className="text-4xl font-extrabold text-gray-100 mb-2">
+        <h1 className="text-4xl font-extrabold text-gray-100 mb-2 uppercase">
           {city}
         </h1>
-        {/* Toggle Button */}
-        <div className="absolute top-20 right-2">
+        <div className="absolute top-0 right-2">
           <label className="inline-flex items-center cursor-pointer">
             <input
               type="checkbox"
@@ -40,9 +54,7 @@ export default function WeatherDetails({ city }) {
           </label>
         </div>
 
-        {/* Weather Details */}
-        <h2 className="text-3xl font-extrabold text-gray-100 mb-2">
-          {/* round of temp value */}
+        <h2 className="text-xl font-extrabold text-gray-100 mb-2">
           Temperature: {Math.round(temperature)} {unit}
         </h2>
         <h3 className="text-lg text-gray-200 mb-1">
@@ -60,11 +72,6 @@ export default function WeatherDetails({ city }) {
         <h3 className="text-lg text-gray-200">
           Precipitation: {weatherData?.rain ? weatherData.rain["1h"] : "0"} mm
         </h3>
-
-        {/* Display JSON data for debugging or further details */}
-        {/* <pre className="text-sm text-gray-300 mt-4 p-2 bg-gray-800 rounded-lg">
-          {JSON.stringify(weatherData, null, 2)}
-        </pre> */}
       </div>
     </WeatherCardLayout>
   );

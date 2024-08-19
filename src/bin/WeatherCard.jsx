@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import WeatherCardLayout from "./WeatherCardLayout";
+import WeatherCardLayout from "../Features/Weather/WeatherCardLayout";
 
 export default function WeatherCard() {
   const dateRef = useRef();

@@ -1,18 +1,18 @@
-import { useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useGetWeatherByCityQuery } from "../../services/weatherApi";
 import WeatherCardLayout from "./WeatherCardLayout";
-import { selectCity } from "./WeatherSlice";
+import { selectCity, selectIsCelsius, setIsCelsius } from "./WeatherSlice";
 
 export default function WeatherDetails() {
-  const [isCelsius, setIsCelsius] = useState(true);
+  const dispatch = useDispatch();
   const city = useSelector(selectCity); // Access city from Redux store
+  const isCelsius = useSelector(selectIsCelsius); // Access isCelsius from Redux store
 
   // Fetch weather data using city name
   const { data: weatherData, isLoading, isError } = useGetWeatherByCityQuery(city);
 
   const handleToggle = () => {
-    setIsCelsius(!isCelsius);
+    dispatch(setIsCelsius(!isCelsius)); // Dispatch action to update isCelsius in Redux store
   };
 
   if (isLoading) {
@@ -47,7 +47,7 @@ export default function WeatherDetails() {
               type="checkbox"
               className="sr-only peer"
               checked={isCelsius}
-              onChange={handleToggle}
+              onChange={handleToggle} // Handle toggle using Redux action
             />
             <div className="relative w-11 h-6 bg-gray-200 rounded-full peer-focus:ring-4 peer-focus:ring-teal-300 peer-checked:bg-teal-600 dark:bg-teal-200 dark:peer-focus:ring-teal-800 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600"></div>
             <span className="ml-3 text-xl text-gray-200 font-bold">{unit}</span>

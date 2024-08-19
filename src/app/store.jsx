@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { weatherApi } from "../services/weatherApi";
-import { timezoneApi } from "../services/timezoneApi";
+import { timezoneApi } from "../bin/timezoneApi";
 import recentSearchesReducer from "../features/recentSearches/recentSearchesSlice";
 import WeatherSlice from "../Features/Weather/WeatherSlice";
 

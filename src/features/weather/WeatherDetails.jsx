@@ -46,7 +46,6 @@ export default function WeatherDetails() {
   const iconCode = weatherData?.weather[0]?.icon;
   getWeatherIconUrl(iconCode);
 
-
   return (
     <WeatherCardLayout gradient="from-teal-400 to-blue-600">
       <div className="relative">

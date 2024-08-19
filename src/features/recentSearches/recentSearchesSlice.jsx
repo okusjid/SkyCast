@@ -14,11 +14,6 @@ const recentSearchesSlice = createSlice({
         return;
       }
 
-      console.log("City: ", city);
-      console.log("Temperature: ", temperature);
-      console.log("Weather: ", weather);
-      console.log("Humidity: ", humidity);
-
       // Check if the search for the city already exists
       const existingIndex = state.findIndex(
         (search) => search.city.toLowerCase() === city.toLowerCase()

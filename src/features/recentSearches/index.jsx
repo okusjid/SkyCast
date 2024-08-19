@@ -1,7 +1,10 @@
 import { useSelector } from "react-redux";
 
 export default function RecentSearches() {
+  // Get the recent searches from the Redux store
   const recentSearches = useSelector((state) => state.recentSearches);
+
+  // Get the temperature unit preference from the Redux store
   const isCelsius = useSelector((state) => state.weather.isCelsius); // Fixed typo: isCelcius -> isCelsius
 
   return (

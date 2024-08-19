@@ -1,6 +1,5 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
-const API_KEY = "e5dbfaad1619ff60fd333a2410444ef9"; // Replace with your OpenWeather API key
+const API_KEY = import.meta.env.VITE_Weather_API_KEY; // || "e5dbfaad1619ff60fd333a2410444ef9";
 
 export const weatherApi = createApi({
   reducerPath: "weatherApi",

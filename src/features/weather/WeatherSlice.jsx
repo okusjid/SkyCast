@@ -1,12 +1,12 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  city: 'Lahore', // Default city
+  city: "Lahore", // Default city
   isCelsius: true, // Fixed typo from isCelcius to isCelsius
 };
 
 const weatherSlice = createSlice({
-  name: 'weather',
+  name: "weather",
   initialState,
   reducers: {
     setCity: (state, action) => {

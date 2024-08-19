@@ -14,7 +14,11 @@ export default function App() {
   const city = useSelector(selectCity);
 
   // Fetch weather data based on the selected city
-  const { data: weatherData, isLoading, isError} = useGetWeatherByCityQuery(city, {
+  const {
+    data: weatherData,
+    isLoading,
+    isError,
+  } = useGetWeatherByCityQuery(city, {
     refetchOnMountOrArgChange: true,
   });
 
@@ -23,7 +27,10 @@ export default function App() {
     dispatch(setCity(searchedCity));
     if (!isLoading && weatherData && !isError) {
       const now = new Date();
-      const formattedTime = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+      const formattedTime = now.toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
       const searchData = {
         city,
         time: formattedTime,
@@ -35,9 +42,6 @@ export default function App() {
       dispatch(addSearch(searchData));
     }
   };
-
-  
-
 
   return (
     <div className="relative h-screen overflow-hidden">
@@ -51,7 +55,7 @@ export default function App() {
       <div className="absolute inset-0 bg-black bg-opacity-60">
         <div className="relative h-full backdrop-blur-md">
           <Header />
-          <div className="flex flex-col items-center pt-8 space-y-8">
+          <div className="flex flex-col items-center pt-4 space-y-8">
             <Search onSearch={handleSearch} />
             <div className="flex justify-center items-center space-x-8">
               <WeatherDetails />

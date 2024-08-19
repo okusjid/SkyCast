@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useGetWeatherByCityQuery } from "../../services/weatherApi";
 import WeatherCardLayout from "./WeatherCardLayout";
 import { selectCity, selectIsCelsius, setIsCelsius } from "./WeatherSlice";
+import { getWeatherIconUrl } from "../../utils/getWeatherIconUrl";
 
 export default function WeatherDetails() {
   const dispatch = useDispatch();
@@ -9,7 +10,11 @@ export default function WeatherDetails() {
   const isCelsius = useSelector(selectIsCelsius); // Access isCelsius from Redux store
 
   // Fetch weather data using city name
-  const { data: weatherData, isLoading, isError } = useGetWeatherByCityQuery(city);
+  const {
+    data: weatherData,
+    isLoading,
+    isError,
+  } = useGetWeatherByCityQuery(city);
 
   const handleToggle = () => {
     dispatch(setIsCelsius(!isCelsius)); // Dispatch action to update isCelsius in Redux store
@@ -25,7 +30,9 @@ export default function WeatherDetails() {
   if (isError) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-xl font-bold text-red-500">Error: Unable to fetch weather data</p>
+        <p className="text-xl font-bold text-red-500">
+          City Not Found. Please try again.
+        </p>
       </div>
     );
   }
@@ -34,6 +41,11 @@ export default function WeatherDetails() {
     ? weatherData?.main.temp
     : (weatherData?.main.temp * 9) / 5 + 32;
   const unit = isCelsius ? "°C" : "°F";
+
+  // Get the weather icon code
+  const iconCode = weatherData?.weather[0]?.icon;
+  getWeatherIconUrl(iconCode);
+
 
   return (
     <WeatherCardLayout gradient="from-teal-400 to-blue-600">
@@ -54,9 +66,18 @@ export default function WeatherDetails() {
           </label>
         </div>
 
-        <h2 className="text-xl font-extrabold text-gray-100 mb-2">
-          Temperature: {Math.round(temperature)} {unit}
-        </h2>
+        <div className="flex items-center space-x-4">
+          <h2 className="text-xl font-extrabold text-gray-100 mb-2">
+            Temperature: {Math.round(temperature)} {unit}
+          </h2>
+          {iconCode && (
+            <img
+              src={getWeatherIconUrl(iconCode)}
+              alt={weatherData?.weather[0]?.description}
+              className="w-16 h-16"
+            />
+          )}
+        </div>
         <h3 className="text-lg text-gray-200 mb-1">
           Weather: {weatherData?.weather[0]?.description || "N/A"}
         </h3>

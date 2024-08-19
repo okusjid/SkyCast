@@ -1,5 +1,4 @@
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
 import Header from "./components/Header";
 import Search from "./components/Search";
 import WeatherDetails from "./Features/Weather/WeatherDetails";

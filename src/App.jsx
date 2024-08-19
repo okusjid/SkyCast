@@ -14,21 +14,16 @@ export default function App() {
   const city = useSelector(selectCity);
 
   // Fetch weather data based on the selected city
-  const { data: weatherData, isLoading, isError } = useGetWeatherByCityQuery(city, {
+  const { data: weatherData, isLoading, isError} = useGetWeatherByCityQuery(city, {
     refetchOnMountOrArgChange: true,
   });
 
   // Handle search and update city state
   const handleSearch = (searchedCity) => {
     dispatch(setCity(searchedCity));
-  };
-
-  // Dispatch weather details to recent searches only when fresh data is fetched successfully
-  useEffect(() => {
     if (!isLoading && weatherData && !isError) {
       const now = new Date();
       const formattedTime = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-
       const searchData = {
         city,
         time: formattedTime,
@@ -39,7 +34,10 @@ export default function App() {
 
       dispatch(addSearch(searchData));
     }
-  }, [weatherData, isLoading, isError, city, dispatch]);
+  };
+
+  
+
 
   return (
     <div className="relative h-screen overflow-hidden">
